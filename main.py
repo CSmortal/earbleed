@@ -2,7 +2,6 @@ import os
 import telebot
 import emoji
 from dotenv import load_dotenv
-from telebot import types
 
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
