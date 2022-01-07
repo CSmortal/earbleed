@@ -31,4 +31,25 @@ def handle_voice_file(message):
     # depending on audio effect selection, send the processed voice file back to user
     
 
+
+@bot.message_handler(func=lambda message: message.text == "Pitch Up", content_types=['text'])
+def handle_pitch_up(message):
+
+    # do processing
+
+    # send processed file back
+    bot.send_message(message.chat.id, "Here is the voice recording but with the pitch increased")
+    bot.send_voice(message.chat.id, message.voice.file_id) # replace 2nd argument with either a file_id that exists on tele servers or pass a http url
+
+
+@bot.message_handler(func=lambda message: message.text == "Pitch Down", content_types=['text'])
+def handle_pitch_down(message):
+
+    # do processing
+
+    # send processed file back
+    bot.send_message(message.chat.id, "Here is the voice recording but with the pitch decreased")
+    bot.send_voice(message.chat.id, message.voice.file_id) # replace 2nd argument with either a file_id that exists on tele servers or pass a http url
+
+
 bot.infinity_polling()
