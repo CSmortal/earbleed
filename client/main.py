@@ -47,7 +47,7 @@ def handle_pitch_up(message):
 def handle_pitch_down(message):
 
     # do processing
-
+    
     # send processed file back
     bot.send_message(message.chat.id, "Here is the voice recording but with the pitch decreased")
     bot.send_voice(message.chat.id, message.voice.file_id) # replace 2nd argument with either a file_id that exists on tele servers or pass a http url
