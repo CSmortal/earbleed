@@ -4,6 +4,9 @@ import emoji
 from dotenv import load_dotenv
 from apply_audio_fx import effect_audio
 from constants import *
+from flask import Flask, request
+
+server = Flask(__name__)
 
 USR_VOX_MSG = None
 TEMP_FILE_PROCESSED = "./temp-fx.ogg"
@@ -99,3 +102,16 @@ def handle_deepfried(message):
         common_reply(message, "!!!HEREISYOURRECORDING!!!")
     
 bot.infinity_polling()
+
+
+@server.route('/' + API_KEY, methods=['POST'])
+def getMessage():
+   bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+   return "!", 200
+@server.route("/")
+def webhook():
+   bot.remove_webhook()
+   bot.set_webhook(url='https://peaceful-fjord-55943.herokuapp.com/' + API_KEY)
+   return "!", 200
+if __name__ == "main":
+   server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
