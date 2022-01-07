@@ -2,6 +2,11 @@ import os
 import telebot
 import emoji
 from dotenv import load_dotenv
+from apply_audio_fx import effect_audio
+from constants import *
+
+USR_VOX_MSG = None
+TEMP_FILE_PROCESSED = "./temp-fx.ogg"
 
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
@@ -12,44 +17,83 @@ bot = telebot.TeleBot(API_KEY)
 def send_greeting(message):
     bot.send_message(message.chat.id, "Hello! I can change the voice and add various effects to it")
 
+# @bot.message_handler(func=lambda message: message.text == "reset", content_types=['text'])
+# def reset(message):
+#     global USR_VOX_MSG
+#     USR_VOX_MSG = None
+#     markup = telebot.types.ReplyKeyboardRemove(selective=False)
+#     bot.send_message(message.chat.id, "Please send another audio clip...", reply_markup=markup)
 
-@bot.message_handler(content_types=['audio', 'voice'])
-def handle_voice_file(message):
-
-    bot.send_voice(message.chat.id, message.voice.file_id)
+# @bot.message_handler(content_types=['audio', 'voice'])
+# def handle_voice_file(message):
+#         global USR_VOX_MSG
+#         if USR_VOX_MSG == None:
+#             USR_VOX_MSG = message.voice.file_id
+#             #bot.send_voice(message.chat.id, message.voice.file_id)
     
-    # add buttons for the user to select the audio effect he/she desires
-    markup = types.ReplyKeyboardMarkup()
+#             # add buttons for the user to select the audio effect he/she desires
+#             markup = telebot.types.ReplyKeyboardMarkup()
 
-    itemPitchIncr = types.KeyboardButton('Pitch Up')
-    itemPitchDecr = types.KeyboardButton('Pitch Down')
+#             itemDeep = telebot.types.KeyboardButton('Deep')
+#             itemChipmunk = telebot.types.KeyboardButton('Chipmunk')
+#             itemReverse = telebot.types.KeyboardButton('Reverse')
+#             itemEcho = telebot.types.KeyboardButton('Echo')
+#             itemDrunk = telebot.types.KeyboardButton('Drunk')
+#             itemDeepFried = telebot.types.KeyboardButton('Deep Fried')
+#             itemReset = telebot.types.KeyboardButton('reset')
 
-    markup.row(itemPitchIncr, itemPitchDecr)
+#             markup.row(itemDeep, itemChipmunk)
+#             markup.row(itemReverse, itemEcho)
+#             markup.row(itemDrunk, itemDeepFried)
+#             markup.row(itemReset)
 
-    bot.send_message(message.chat.id, "Choose the audio effect you would like to add", reply_markup=markup)
+#             # depending on audio effect selection, send the processed voice file back to user
+#             bot.send_message(message.chat.id, "Choose the audio effect you would like to add", reply_markup=markup)
 
-    # depending on audio effect selection, send the processed voice file back to user
+# def common_reply(message):
+
+# @bot.message_handler(func=lambda message: message.text == "Deep", content_types=['text'])
+# def handle_deep(message):
+#     global USR_VOX_MSG
+#     if not USR_VOX_MSG == None:
+#         effect_audio(USR_VOX_MSG, API_KEY, DEEP)
+#         bot.send_message(message.chat.id, message)
+#         voice = open(TEMP_FILE_PROCESSED, 'rb')
+#         bot.send_voice(message.chat.id, voice)
+        # reset(message)
+
+# @bot.message_handler(func=lambda message: message.text == "Chipmunk", content_types=['text'])
+# def handle_chipmunk(message):
+#     global USR_VOX_MSG
+#     if not USR_VOX_MSG == None:
+#         effect_audio(USR_VOX_MSG, API_KEY, CHIPMUNK)
+#         common_reply("Here you go, you chipmunk")
+
+# @bot.message_handler(func=lambda message: message.text == "Reverse", content_types=['text'])
+# def handle_reverse(message):
+#     global USR_VOX_MSG
+#     if not USR_VOX_MSG == None:
+#         effect_audio(USR_VOX_MSG, API_KEY, REVERSE)
+#         common_reply("gnidrocer rouy si ereH")
+
+# @bot.message_handler(func=lambda message: message.text == "Echo", content_types=['text'])
+# def handle_echo(message):
+#     global USR_VOX_MSG
+#     if not USR_VOX_MSG == None:
+#         effect_audio(USR_VOX_MSG, API_KEY, ECHO)
+#         common_reply("Here here is is your your recording recording")
+
+# @bot.message_handler(func=lambda message: message.text == "Drunk", content_types=['text'])
+# def handle_drunk(message):
+#     global USR_VOX_MSG
+#     if not USR_VOX_MSG == None:
+#         effect_audio(USR_VOX_MSG, API_KEY, DRUNK)
+#         common_reply("heRe iS yOUr REc0oo..rrDiNg")
+
+# @bot.message_handler(func=lambda message: message.text == "Deep Fried", content_types=['text'])
+# def handle_deepfried(message):
+#     global USR_VOX_MSG
+#     if not USR_VOX_MSG == None:
+#         effect_audio(USR_VOX_MSG, API_KEY, ECHO)
+#         common_reply("!!!HEREISYOURRECORDING!!!")
     
-
-
-@bot.message_handler(func=lambda message: message.text == "Pitch Up", content_types=['text'])
-def handle_pitch_up(message):
-
-    # do processing
-
-    # send processed file back
-    bot.send_message(message.chat.id, "Here is the voice recording but with the pitch increased")
-    bot.send_voice(message.chat.id, message.voice.file_id) # replace 2nd argument with either a file_id that exists on tele servers or pass a http url
-
-
-@bot.message_handler(func=lambda message: message.text == "Pitch Down", content_types=['text'])
-def handle_pitch_down(message):
-
-    # do processing
-
-    # send processed file back
-    bot.send_message(message.chat.id, "Here is the voice recording but with the pitch decreased")
-    bot.send_voice(message.chat.id, message.voice.file_id) # replace 2nd argument with either a file_id that exists on tele servers or pass a http url
-
-
-bot.infinity_polling()
